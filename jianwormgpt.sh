@@ -21,25 +21,17 @@ fi
 clear
 
 echo -e "${RED}"
-cat << "EOF"
-        _,met$$$$$gg.          
-     ,g$$$$$$$$$$$$$$$P.       
-   ,g$$P"     """Y$$.".        
-  ,$$P'              `$$$.     
- ',$$P       ,ggs.     `$$b:   
- `d$$'     ,$P"'   .    $$$    
- $$P      d$'     ,    $$P    
- $$:      $$.   -    ,d$$'    
- $$;      Y$b._   _,d$P'      
- Y$$.    `.`"Y$$$$P"'         
- `$$b      "-.__              
-  `Y$$                       
-   `Y$$.                     
-     `$$b.                   
-       `Y$$b.                
-          `"Y$b._            
-              `""""          
-EOF
+echo " /$$      /$$                                          /$$$$$$              /$$    "
+echo "| $$  /$ | $$                                         /$$__  $$            | $$    "
+echo "| $$ /$$$| $$  /$$$$$$   /$$$$$$  /$$$$$$/$$$$       | $$  \\__/  /$$$$$$  /$$$$$$  "
+echo "| $$/$$ $$ $$ /$$__  $$ /$$__  $$| $$_  $$_  $$      | $$ /$$$$ /$$__  $$|_  $$_/  "
+echo "| $$$$_  $$$$| $$  \\ $$| $$  \\__/| $$ \\ $$ \\ $$      | $$|_  $$| $$  \\ $$  | $$    "
+echo "| $$$/ \\  $$$| $$  | $$| $$      | $$ | $$ | $$      | $$  \\ $$| $$  | $$  | $$ /$$"
+echo "| $$/   \\  $$|  $$$$$$/| $$      | $$ | $$ | $$      |  $$$$$$/| $$$$$$$/  |  $$$$/"
+echo "|__/     \\__/ \\______/ |__/      |__/ |__/ |__/       \\______/ | $$____/    \\___/  "
+echo "                                                               | $$                "
+echo "                                                               | $$                "
+echo "                                                               |__/                "
 echo -e "${NC}"
 
 echo -e "${GREEN}══════════════════════════════════════════════════════════"
@@ -51,17 +43,14 @@ echo ""
 
 loading_animation() {
     echo -e "${YELLOW}Connecting to WormGPT API...${NC}"
-    for i in {1..10}; do
-        echo -ne "${CYAN}[${NC}"
-        for j in $(seq 1 $i); do
-            echo -ne "${CYAN}=${NC}"
-        done
-        for j in $(seq $i 9); do
-            echo -ne " "
-        done
-        echo -ne "${CYAN}] $((i*10))%\r${NC}"
-        sleep 0.1
-    done
+    echo -ne "${CYAN}[==========                    ] 25%\r${NC}"
+    sleep 0.2
+    echo -ne "${CYAN}[==================            ] 50%\r${NC}"
+    sleep 0.2
+    echo -ne "${CYAN}[==========================    ] 75%\r${NC}"
+    sleep 0.2
+    echo -ne "${CYAN}[================================] 100%\r${NC}"
+    sleep 0.2
     echo -e "\n"
 }
 
@@ -160,29 +149,7 @@ chat_mode() {
     done
 }
 
-show_system_info() {
-    echo -e "${RED}"
-cat << "EOF"
-        _,met$$$$$gg.          
-     ,g$$$$$$$$$$$$$$$P.       
-   ,g$$P"     """Y$$.".        
-  ,$$P'              `$$$.     
- ',$$P       ,ggs.     `$$b:   
- `d$$'     ,$P"'   .    $$$    
- $$P      d$'     ,    $$P    
- $$:      $$.   -    ,d$$'    
- $$;      Y$b._   _,d$P'      
- Y$$.    `.`"Y$$$$P"'         
- `$$b      "-.__              
-  `Y$$                       
-   `Y$$.                     
-     `$$b.                   
-       `Y$$b.                
-          `"Y$b._            
-              `""""          
-EOF
-echo -e "${NC}"
-    
+show_system_info() {    
     echo -e "${CYAN}════════════════════════════════════════"
     echo "              SYSTEM INFORMATION"
     echo "════════════════════════════════════════${NC}"
@@ -231,34 +198,5 @@ while true; do
     
     echo ""
     read -p "$(echo -e ${YELLOW}Press Enter to continue...${NC})"
-    clear
-    
-    echo -e "${RED}"
-cat << "EOF"
-        _,met$$$$$gg.          
-     ,g$$$$$$$$$$$$$$$P.       
-   ,g$$P"     """Y$$.".        
-  ,$$P'              `$$$.     
- ',$$P       ,ggs.     `$$b:   
- `d$$'     ,$P"'   .    $$$    
- $$P      d$'     ,    $$P    
- $$:      $$.   -    ,d$$'    
- $$;      Y$b._   _,d$P'      
- Y$$.    `.`"Y$$$$P"'         
- `$$b      "-.__              
-  `Y$$                       
-   `Y$$.                     
-     `$$b.                   
-       `Y$$b.                
-          `"Y$b._            
-              `""""          
-EOF
-echo -e "${NC}"
-
-    echo -e "${GREEN}══════════════════════════════════════════════════════════"
-    echo "                  WORMGPT TERMINAL v4.0"
-    echo "              Developer: JianCode"
-    echo "           Total Users: $USER_COUNT"
-    echo "══════════════════════════════════════════════════════════${NC}"
     echo ""
 done
