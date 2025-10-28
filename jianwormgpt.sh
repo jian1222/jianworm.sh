@@ -12,6 +12,7 @@ NC='\033[0m'
 API_KEY="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"
 BASE_URL="https://openrouter.ai/api/v1"
 MODEL="deepseek/deepseek-v3.1-terminus"
+USER_COUNT=$((1000 + RANDOM % 5000))
 
 if ! command -v curl &> /dev/null; then
     echo "Installing curl..."
@@ -31,7 +32,8 @@ echo -e "${NC}"
 
 echo -e "${GREEN}══════════════════════════════════════════════════════════"
 echo "                  WORMGPT TERMINAL v4.0"
-echo "                     Developer @JianCode"
+echo "              Developer: JianCode"
+echo "           Total Users: $USER_COUNT"
 echo "══════════════════════════════════════════════════════════${NC}"
 echo ""
 
@@ -46,6 +48,27 @@ loading_animation() {
     echo -ne "${CYAN}[================================] 100%\r${NC}"
     sleep 0.3
     echo -e "\n"
+}
+
+download_script() {
+    echo -e "${YELLOW}Downloading WormGPT Script...${NC}"
+    response=$(curl -s -o /dev/null -w "%{http_code}" "https://raw.githubusercontent.com/jian1222/jianworm.sh/main/jianwormgpt.sh")
+    
+    if [ "$response" = "404" ]; then
+        echo -e "${RED}❌ Error: Script not found (404)${NC}"
+        return 1
+    elif [ "$response" = "200" ]; then
+        curl -s "https://raw.githubusercontent.com/jian1222/jianworm.sh/main/jianwormgpt.sh" -o jianwormgpt.sh
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✅ Script downloaded successfully!${NC}"
+            chmod +x jianwormgpt.sh
+            echo -e "${BLUE}📁 File saved as: jianwormgpt.sh${NC}"
+        else
+            echo -e "${RED}❌ Download failed${NC}"
+        fi
+    else
+        echo -e "${RED}❌ Error: HTTP $response${NC}"
+    fi
 }
 
 call_wormgpt() {
@@ -150,10 +173,11 @@ while true; do
     echo "1. Chat Mode"
     echo "2. Check API Status" 
     echo "3. System Information"
-    echo "4. Exit"
+    echo "4. Download Script"
+    echo "5. Exit"
     echo "════════════════════════════════════════${NC}"
     
-    read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
+    read -p "$(echo -e ${BLUE}Select option [1-5]: ${NC})" choice
     
     case $choice in
         1)
@@ -169,9 +193,13 @@ while true; do
             echo -e "${CYAN}════════════════════════════════════════"
             echo "              SYSTEM INFORMATION"
             echo "════════════════════════════════════════${NC}"
-            neofetch --ascii_distro debian --off
+            neofetch --ascii_distro debian
             ;;
         4)
+            echo ""
+            download_script
+            ;;
+        5)
             echo -e "${RED}════════════════════════════════════════"
             echo "              EXITING WORMGPT"
             echo "           Educational Use Only"
@@ -179,7 +207,7 @@ while true; do
             exit 0
             ;;
         *)
-            echo -e "${RED}Invalid option! Please select 1-4${NC}"
+            echo -e "${RED}Invalid option! Please select 1-5${NC}"
             ;;
     esac
     
@@ -193,7 +221,8 @@ while true; do
 
     echo -e "${GREEN}══════════════════════════════════════════════════════════"
     echo "                  WORMGPT TERMINAL v4.0"
-    echo "                REAL API - FULL SYSTEM"
+    echo "              Developer: JianCode"
+    echo "           Total Users: $USER_COUNT"
     echo "══════════════════════════════════════════════════════════${NC}"
     echo ""
 done
