@@ -12,7 +12,6 @@ NC='\033[0m'
 API_KEY="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"
 BASE_URL="https://openrouter.ai/api/v1"
 MODEL="deepseek/deepseek-v3.1-terminus"
-USER_COUNT=$((1000 + RANDOM % 5000))
 
 if ! command -v curl &> /dev/null; then
     echo "Installing curl..."
@@ -32,8 +31,7 @@ echo -e "${NC}"
 
 echo -e "${GREEN}══════════════════════════════════════════════════════════"
 echo "                  WORMGPT TERMINAL v4.0"
-echo "              Developer: JianCode"
-echo "           Total Users: $USER_COUNT"
+echo "                REAL API - FULL SYSTEM"
 echo "══════════════════════════════════════════════════════════${NC}"
 echo ""
 
@@ -171,7 +169,7 @@ while true; do
             echo -e "${CYAN}════════════════════════════════════════"
             echo "              SYSTEM INFORMATION"
             echo "════════════════════════════════════════${NC}"
-            neofetch --ascii_distro debian
+            neofetch --ascii_distro debian --off
             ;;
         4)
             echo -e "${RED}════════════════════════════════════════"
@@ -195,8 +193,7 @@ while true; do
 
     echo -e "${GREEN}══════════════════════════════════════════════════════════"
     echo "                  WORMGPT TERMINAL v4.0"
-    echo "              Developer: JianCode"
-    echo "           Total Users: $USER_COUNT"
+    echo "                REAL API - FULL SYSTEM"
     echo "══════════════════════════════════════════════════════════${NC}"
     echo ""
 done
