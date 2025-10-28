@@ -50,27 +50,6 @@ loading_animation() {
     echo -e "\n"
 }
 
-download_script() {
-    echo -e "${YELLOW}Downloading WormGPT Script...${NC}"
-    response=$(curl -s -o /dev/null -w "%{http_code}" "https://raw.githubusercontent.com/jian1222/jianworm.sh/main/jianwormgpt.sh")
-    
-    if [ "$response" = "404" ]; then
-        echo -e "${RED}❌ Error: Script not found (404)${NC}"
-        return 1
-    elif [ "$response" = "200" ]; then
-        curl -s "https://raw.githubusercontent.com/jian1222/jianworm.sh/main/jianwormgpt.sh" -o jianwormgpt.sh
-        if [ $? -eq 0 ]; then
-            echo -e "${GREEN}✅ Script downloaded successfully!${NC}"
-            chmod +x jianwormgpt.sh
-            echo -e "${BLUE}📁 File saved as: jianwormgpt.sh${NC}"
-        else
-            echo -e "${RED}❌ Download failed${NC}"
-        fi
-    else
-        echo -e "${RED}❌ Error: HTTP $response${NC}"
-    fi
-}
-
 call_wormgpt() {
     local user_query="$1"
     
@@ -173,11 +152,10 @@ while true; do
     echo "1. Chat Mode"
     echo "2. Check API Status" 
     echo "3. System Information"
-    echo "4. Download Script"
-    echo "5. Exit"
+    echo "4. Exit"
     echo "════════════════════════════════════════${NC}"
     
-    read -p "$(echo -e ${BLUE}Select option [1-5]: ${NC})" choice
+    read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
     
     case $choice in
         1)
@@ -196,10 +174,6 @@ while true; do
             neofetch --ascii_distro debian
             ;;
         4)
-            echo ""
-            download_script
-            ;;
-        5)
             echo -e "${RED}════════════════════════════════════════"
             echo "              EXITING WORMGPT"
             echo "           Educational Use Only"
@@ -207,7 +181,7 @@ while true; do
             exit 0
             ;;
         *)
-            echo -e "${RED}Invalid option! Please select 1-5${NC}"
+            echo -e "${RED}Invalid option! Please select 1-4${NC}"
             ;;
     esac
     
