@@ -12,47 +12,40 @@ NC='\033[0m'
 API_KEY="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"
 BASE_URL="https://openrouter.ai/api/v1"
 MODEL="deepseek/deepseek-v3.1-terminus"
-USER_COUNT=$((1000 + RANDOM % 5000))
 
-install_dependencies() {
-    if ! command -v curl &> /dev/null; then
-        echo "Installing curl..."
-        pkg install -y curl
-    fi
+if ! command -v curl &> /dev/null; then
+    echo "Installing curl..."
+    pkg install -y curl
+fi
 
-    if ! command -v neofetch &> /dev/null; then
-        echo "Installing neofetch..."
-        pkg install -y neofetch
-    fi
-}
+if ! command -v neofetch &> /dev/null; then
+    echo "Installing neofetch..."
+    pkg install -y neofetch
+fi
 
-show_banner() {
-    clear
-    echo -e "${RED}"
-    neofetch --ascii_distro debian 2>/dev/null || echo "System Info"
-    echo -e "${NC}"
+clear
 
-    echo -e "${GREEN}══════════════════════════════════════════════════════════"
-    echo "                  WORMGPT TERMINAL v4.0"
-    echo "              Developer: JianCode"
-    echo "           Total Users: $USER_COUNT"
-    echo "══════════════════════════════════════════════════════════${NC}"
-    echo ""
-}
+echo -e "${RED}"
+neofetch --ascii_distro debian
+echo -e "${NC}"
+
+echo -e "${GREEN}══════════════════════════════════════════════════════════"
+echo "                  WORMGPT TERMINAL v4.0"
+echo "                REAL API - FULL SYSTEM"
+echo "══════════════════════════════════════════════════════════${NC}"
+echo ""
 
 loading_animation() {
     echo -e "${YELLOW}Connecting to WormGPT API...${NC}"
-    for i in {1..10}; do
-        case $i in
-            1|2) echo -ne "${CYAN}[====                      ] ${i}0%\r${NC}" ;;
-            3|4) echo -ne "${CYAN}[========                  ] ${i}0%\r${NC}" ;;
-            5|6) echo -ne "${CYAN}[============              ] ${i}0%\r${NC}" ;;
-            7|8) echo -ne "${CYAN}[================          ] ${i}0%\r${NC}" ;;
-            9|10) echo -ne "${CYAN}[====================      ] ${i}0%\r${NC}" ;;
-        esac
-        sleep 0.2
-    done
-    echo -ne "${CYAN}[========================] 100%${NC}\n"
+    echo -ne "${CYAN}[==========                    ] 25%\r${NC}"
+    sleep 0.3
+    echo -ne "${CYAN}[==================            ] 50%\r${NC}"
+    sleep 0.3
+    echo -ne "${CYAN}[==========================    ] 75%\r${NC}"
+    sleep 0.3
+    echo -ne "${CYAN}[================================] 100%\r${NC}"
+    sleep 0.3
+    echo -e "\n"
 }
 
 call_wormgpt() {
@@ -76,7 +69,7 @@ call_wormgpt() {
         }
     ],
     "temperature": 0.7,
-    "max_tokens": 800
+    "max_tokens": 1800
 }
 EOF
 )
@@ -85,18 +78,12 @@ EOF
         -H "Authorization: Bearer $API_KEY" \
         -H "Content-Type: application/json" \
         -d "$request_data" \
-        --connect-timeout 45 \
-        --max-time 90 \
+        --connect-timeout 30 \
+        --max-time 60 \
         "$BASE_URL/chat/completions")
 
     if [ $? -ne 0 ]; then
         echo -e "${RED}Error: Failed to connect to API${NC}"
-        echo -e "${YELLOW}Please check your internet connection and try again.${NC}"
-        return 1
-    fi
-
-    if [ -z "$response" ]; then
-        echo -e "${RED}Error: Empty response from API${NC}"
         return 1
     fi
 
@@ -104,7 +91,6 @@ EOF
 
     if [ -z "$answer" ]; then
         echo -e "${RED}Error: No valid response from AI${NC}"
-        echo -e "${YELLOW}API Response: $response${NC}"
         return 1
     fi
 
@@ -118,18 +104,16 @@ EOF
 check_api_status() {
     echo -e "${CYAN}Checking API status...${NC}"
     
-    response=$(curl -s -w "%{http_code}" -X GET \
+    response=$(curl -s -I -X GET \
         -H "Authorization: Bearer $API_KEY" \
-        --connect-timeout 15 \
+        --connect-timeout 10 \
         "$BASE_URL/models")
     
-    http_code=$(echo "$response" | tail -1)
-    
-    if [ "$http_code" = "200" ]; then
+    if echo "$response" | grep -q "200"; then
         echo -e "${GREEN}✅ API is online and accessible${NC}"
         return 0
     else
-        echo -e "${RED}❌ API is not accessible (HTTP $http_code)${NC}"
+        echo -e "${RED}❌ API is not accessible${NC}"
         return 1
     fi
 }
@@ -159,54 +143,57 @@ chat_mode() {
     done
 }
 
-main_menu() {
-    while true; do
-        echo -e "${PURPLE}════════════════════════════════════════"
-        echo "              WORMGPT MAIN MENU"
-        echo "════════════════════════════════════════"
-        echo "1. Chat Mode"
-        echo "2. Check API Status" 
-        echo "3. System Information"
-        echo "4. Exit"
-        echo "════════════════════════════════════════${NC}"
-        
-        read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
-        
-        case $choice in
-            1)
-                echo ""
-                chat_mode
-                ;;
-            2)
-                echo ""
-                check_api_status
-                ;;
-            3)
-                echo ""
-                echo -e "${CYAN}════════════════════════════════════════"
-                echo "              SYSTEM INFORMATION"
-                echo "════════════════════════════════════════${NC}"
-                neofetch --ascii_distro debian 2>/dev/null || echo "Neofetch not available"
-                ;;
-            4)
-                echo -e "${RED}════════════════════════════════════════"
-                echo "              EXITING WORMGPT"
-                echo "           Educational Use Only"
-                echo "════════════════════════════════════════${NC}"
-                exit 0
-                ;;
-            *)
-                echo -e "${RED}Invalid option! Please select 1-4${NC}"
-                ;;
-        esac
-        
-        echo ""
-        read -p "$(echo -e ${YELLOW}Press Enter to continue...${NC})" dummy
-        show_banner
-    done
-}
+while true; do
+    echo -e "${PURPLE}════════════════════════════════════════"
+    echo "              WORMGPT MAIN MENU"
+    echo "════════════════════════════════════════"
+    echo "1. Chat Mode"
+    echo "2. Check API Status" 
+    echo "3. System Information"
+    echo "4. Exit"
+    echo "════════════════════════════════════════${NC}"
+    
+    read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
+    
+    case $choice in
+        1)
+            echo ""
+            chat_mode
+            ;;
+        2)
+            echo ""
+            check_api_status
+            ;;
+        3)
+            echo ""
+            echo -e "${CYAN}════════════════════════════════════════"
+            echo "              SYSTEM INFORMATION"
+            echo "════════════════════════════════════════${NC}"
+            neofetch --ascii_distro debian --off
+            ;;
+        4)
+            echo -e "${RED}════════════════════════════════════════"
+            echo "              EXITING WORMGPT"
+            echo "           Educational Use Only"
+            echo "════════════════════════════════════════${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Invalid option! Please select 1-4${NC}"
+            ;;
+    esac
+    
+    echo ""
+    read -p "$(echo -e ${YELLOW}Press Enter to continue...${NC})"
+    clear
+    
+    echo -e "${RED}"
+    neofetch --ascii_distro debian
+    echo -e "${NC}"
 
-# Main execution
-install_dependencies
-show_banner
-main_menu
+    echo -e "${GREEN}══════════════════════════════════════════════════════════"
+    echo "                  WORMGPT TERMINAL v4.0"
+    echo "                REAL API - FULL SYSTEM"
+    echo "══════════════════════════════════════════════════════════${NC}"
+    echo ""
+done
