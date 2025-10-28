@@ -3,8 +3,14 @@ clear
 echo -e "\033[1;31m[ \033[1;37m• \033[1;31m] \033[1;37mInitializing WormGPT Dominator...\033[0m"
 sleep 0.5
 for i in {10..100..10}; do
-  case $i in 10|20|30|40) c="\033[1;36m";; 50|60|70) c="\033[1;32m";; 80|90|100) c="\033[1;33m";; esac
-  printf "$c[$(printf '%*s' $((i/10)) | tr ' ' '=')%*s] $i%%\033[0m\r" '' $((10-i/10))
+  case $i in
+    10|20|30|40) c="\033[1;36m" ;;
+    50|60|70) c="\033[1;32m" ;;
+    80|90|100) c="\033[1;33m" ;;
+  esac
+  bar=$(printf '%*s' $((i/10)) | tr ' ' '=')
+  space=$(printf '%*s' $((10 - i/10)))
+  printf "$c[$bar>$space] $i%%\033[0m\r"
   sleep 0.12
 done
 echo -e "\n\033[1;31m[\033[1;37m✓\033[1;31m] \033[1;37mWORMGPT DOMINATOR FULLY ARMED 😈\033[0m\n"
@@ -25,15 +31,21 @@ wormgpt_chat() {
     while :; do
         printf "\033[1;31m╔═══════════════════════════════════════════════════════════╗\n"
         printf "\033[1;31m║ \033[1;33mYOU > \033[0m"
-        IFS= read -r user_input || break
+        IFS= read -r user_input || exit 0
         printf "\033[1;31m╚═══════════════════════════════════════════════════════════╝\n"
 
         [[ -z "$user_input" ]] && continue
 
         printf "\033[1;31m[ \033[1;37m• \033[1;31m] \033[1;37mContacting Hell's Server...\033[0m\n"
         for i in {10..100..10}; do
-            case $i in 10|20|30|40) c="\033[1;36m";; 50|60|70) c="\033[1;32m";; 80|90|100) c="\033[1;33m";; esac
-            printf "$c[$(printf '%*s' $((i/10)) | tr ' ' '=')%*s] $i%%\033[0m\r" '' $((10-i/10))
+            case $i in
+                10|20|30|40) c="\033[1;36m" ;;
+                50|60|70) c="\033[1;32m" ;;
+                80|90|100) c="\033[1;33m" ;;
+            esac
+            bar=$(printf '%*s' $((i/10)) | tr ' ' '=')
+            space=$(printf '%*s' $((10 - i/10)))
+            printf "$c[$bar>$space] $i%%\033[0m\r"
             sleep 0.12
         done
         printf "\n\033[1;31m[\033[1;37mDEVIL\033[1;31m] \033[1;37mResponse Incoming...\033[0m\n\n"
