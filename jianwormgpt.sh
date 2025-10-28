@@ -15,19 +15,31 @@ MODEL="deepseek/deepseek-v3.1-terminus"
 USER_COUNT=$((1000 + RANDOM % 5000))
 
 if ! command -v curl &> /dev/null; then
-    echo "Installing curl..."
     pkg install -y curl
-fi
-
-if ! command -v neofetch &> /dev/null; then
-    echo "Installing neofetch..."
-    pkg install -y neofetch
 fi
 
 clear
 
 echo -e "${RED}"
-neofetch --ascii_distro debian
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
 echo -e "${NC}"
 
 echo -e "${GREEN}══════════════════════════════════════════════════════════"
@@ -39,14 +51,17 @@ echo ""
 
 loading_animation() {
     echo -e "${YELLOW}Connecting to WormGPT API...${NC}"
-    echo -ne "${CYAN}[==========                    ] 25%\r${NC}"
-    sleep 0.3
-    echo -ne "${CYAN}[==================            ] 50%\r${NC}"
-    sleep 0.3
-    echo -ne "${CYAN}[==========================    ] 75%\r${NC}"
-    sleep 0.3
-    echo -ne "${CYAN}[================================] 100%\r${NC}"
-    sleep 0.3
+    for i in {1..10}; do
+        echo -ne "${CYAN}[${NC}"
+        for j in $(seq 1 $i); do
+            echo -ne "${CYAN}=${NC}"
+        done
+        for j in $(seq $i 9); do
+            echo -ne " "
+        done
+        echo -ne "${CYAN}] $((i*10))%\r${NC}"
+        sleep 0.1
+    done
     echo -e "\n"
 }
 
@@ -145,6 +160,38 @@ chat_mode() {
     done
 }
 
+show_system_info() {
+    echo -e "${RED}"
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
+echo -e "${NC}"
+    
+    echo -e "${CYAN}════════════════════════════════════════"
+    echo "              SYSTEM INFORMATION"
+    echo "════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}OS: ${WHITE}Termux${NC}"
+    echo -e "${YELLOW}Architecture: ${WHITE}$(uname -m)${NC}"
+    echo -e "${YELLOW}Kernel: ${WHITE}$(uname -r)${NC}"
+    echo -e "${YELLOW}Shell: ${WHITE}$SHELL${NC}"
+}
+
 while true; do
     echo -e "${PURPLE}════════════════════════════════════════"
     echo "              WORMGPT MAIN MENU"
@@ -168,10 +215,7 @@ while true; do
             ;;
         3)
             echo ""
-            echo -e "${CYAN}════════════════════════════════════════"
-            echo "              SYSTEM INFORMATION"
-            echo "════════════════════════════════════════${NC}"
-            neofetch --ascii_distro debian
+            show_system_info
             ;;
         4)
             echo -e "${RED}════════════════════════════════════════"
@@ -190,8 +234,26 @@ while true; do
     clear
     
     echo -e "${RED}"
-    neofetch --ascii_distro debian
-    echo -e "${NC}"
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
+echo -e "${NC}"
 
     echo -e "${GREEN}══════════════════════════════════════════════════════════"
     echo "                  WORMGPT TERMINAL v4.0"
