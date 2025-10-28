@@ -14,36 +14,55 @@ BASE_URL="https://openrouter.ai/api/v1"
 MODEL="deepseek/deepseek-v3.1-terminus"
 USER_COUNT=$((1000 + RANDOM % 5000))
 
-install_dependencies() {
-    if ! command -v curl &> /dev/null; then
-        echo "Installing curl..."
-        pkg install -y curl
-    fi
-}
+if ! command -v curl &> /dev/null; then
+    pkg install -y curl
+fi
 
-show_banner() {
-    clear
-    echo -e "${GREEN}══════════════════════════════════════════════════════════"
-    echo "                  WORMGPT TERMINAL v4.0"
-    echo "              Developer: JianCode"
-    echo "           Total Users: $USER_COUNT"
-    echo "══════════════════════════════════════════════════════════${NC}"
-    echo ""
-}
+clear
+
+echo -e "${RED}"
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
+echo -e "${NC}"
+
+echo -e "${GREEN}══════════════════════════════════════════════════════════"
+echo "                  WORMGPT TERMINAL v4.0"
+echo "              Developer: JianCode"
+echo "           Total Users: $USER_COUNT"
+echo "══════════════════════════════════════════════════════════${NC}"
+echo ""
 
 loading_animation() {
     echo -e "${YELLOW}Connecting to WormGPT API...${NC}"
     for i in {1..10}; do
-        case $i in
-            1|2) echo -ne "${CYAN}[====                      ] ${i}0%\r${NC}" ;;
-            3|4) echo -ne "${CYAN}[========                  ] ${i}0%\r${NC}" ;;
-            5|6) echo -ne "${CYAN}[============              ] ${i}0%\r${NC}" ;;
-            7|8) echo -ne "${CYAN}[================          ] ${i}0%\r${NC}" ;;
-            9|10) echo -ne "${CYAN}[====================      ] ${i}0%\r${NC}" ;;
-        esac
-        sleep 0.2
+        echo -ne "${CYAN}[${NC}"
+        for j in $(seq 1 $i); do
+            echo -ne "${CYAN}=${NC}"
+        done
+        for j in $(seq $i 9); do
+            echo -ne " "
+        done
+        echo -ne "${CYAN}] $((i*10))%\r${NC}"
+        sleep 0.1
     done
-    echo -ne "${CYAN}[========================] 100%${NC}\n"
+    echo -e "\n"
 }
 
 call_wormgpt() {
@@ -76,18 +95,12 @@ EOF
         -H "Authorization: Bearer $API_KEY" \
         -H "Content-Type: application/json" \
         -d "$request_data" \
-        --connect-timeout 45 \
-        --max-time 90 \
+        --connect-timeout 30 \
+        --max-time 60 \
         "$BASE_URL/chat/completions")
 
     if [ $? -ne 0 ]; then
         echo -e "${RED}Error: Failed to connect to API${NC}"
-        echo -e "${YELLOW}Please check your internet connection and try again.${NC}"
-        return 1
-    fi
-
-    if [ -z "$response" ]; then
-        echo -e "${RED}Error: Empty response from API${NC}"
         return 1
     fi
 
@@ -108,18 +121,16 @@ EOF
 check_api_status() {
     echo -e "${CYAN}Checking API status...${NC}"
     
-    response=$(curl -s -w "%{http_code}" -X GET \
+    response=$(curl -s -I -X GET \
         -H "Authorization: Bearer $API_KEY" \
-        --connect-timeout 15 \
+        --connect-timeout 10 \
         "$BASE_URL/models")
     
-    http_code=$(echo "$response" | tail -1)
-    
-    if [ "$http_code" = "200" ]; then
+    if echo "$response" | grep -q "200"; then
         echo -e "${GREEN}✅ API is online and accessible${NC}"
         return 0
     else
-        echo -e "${RED}❌ API is not accessible (HTTP $http_code)${NC}"
+        echo -e "${RED}❌ API is not accessible${NC}"
         return 1
     fi
 }
@@ -149,56 +160,105 @@ chat_mode() {
     done
 }
 
-main_menu() {
-    while true; do
-        echo -e "${PURPLE}════════════════════════════════════════"
-        echo "              WORMGPT MAIN MENU"
-        echo "════════════════════════════════════════"
-        echo "1. Chat Mode"
-        echo "2. Check API Status" 
-        echo "3. System Information"
-        echo "4. Exit"
-        echo "════════════════════════════════════════${NC}"
-        
-        read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
-        
-        case $choice in
-            1)
-                echo ""
-                chat_mode
-                ;;
-            2)
-                echo ""
-                check_api_status
-                ;;
-            3)
-                echo ""
-                echo -e "${CYAN}════════════════════════════════════════"
-                echo "              SYSTEM INFORMATION"
-                echo "════════════════════════════════════════${NC}"
-                echo -e "${YELLOW}OS: $(uname -o)${NC}"
-                echo -e "${YELLOW}Kernel: $(uname -r)${NC}"
-                echo -e "${YELLOW}Architecture: $(uname -m)${NC}"
-                echo -e "${YELLOW}Hostname: $(hostname)${NC}"
-                ;;
-            4)
-                echo -e "${RED}════════════════════════════════════════"
-                echo "              EXITING WORMGPT"
-                echo "           Educational Use Only"
-                echo "════════════════════════════════════════${NC}"
-                exit 0
-                ;;
-            *)
-                echo -e "${RED}Invalid option! Please select 1-4${NC}"
-                ;;
-        esac
-        
-        echo ""
-        read -p "$(echo -e ${YELLOW}Press Enter to continue...${NC})" dummy
-        show_banner
-    done
+show_system_info() {
+    echo -e "${RED}"
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
+echo -e "${NC}"
+    
+    echo -e "${CYAN}════════════════════════════════════════"
+    echo "              SYSTEM INFORMATION"
+    echo "════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}OS: ${WHITE}Termux${NC}"
+    echo -e "${YELLOW}Architecture: ${WHITE}$(uname -m)${NC}"
+    echo -e "${YELLOW}Kernel: ${WHITE}$(uname -r)${NC}"
+    echo -e "${YELLOW}Shell: ${WHITE}$SHELL${NC}"
 }
 
-install_dependencies
-show_banner
-main_menu
+while true; do
+    echo -e "${PURPLE}════════════════════════════════════════"
+    echo "              WORMGPT MAIN MENU"
+    echo "════════════════════════════════════════"
+    echo "1. Chat Mode"
+    echo "2. Check API Status" 
+    echo "3. System Information"
+    echo "4. Exit"
+    echo "════════════════════════════════════════${NC}"
+    
+    read -p "$(echo -e ${BLUE}Select option [1-4]: ${NC})" choice
+    
+    case $choice in
+        1)
+            echo ""
+            chat_mode
+            ;;
+        2)
+            echo ""
+            check_api_status
+            ;;
+        3)
+            echo ""
+            show_system_info
+            ;;
+        4)
+            echo -e "${RED}════════════════════════════════════════"
+            echo "              EXITING WORMGPT"
+            echo "           Educational Use Only"
+            echo "════════════════════════════════════════${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Invalid option! Please select 1-4${NC}"
+            ;;
+    esac
+    
+    echo ""
+    read -p "$(echo -e ${YELLOW}Press Enter to continue...${NC})"
+    clear
+    
+    echo -e "${RED}"
+cat << "EOF"
+        _,met$$$$$gg.          
+     ,g$$$$$$$$$$$$$$$P.       
+   ,g$$P"     """Y$$.".        
+  ,$$P'              `$$$.     
+ ',$$P       ,ggs.     `$$b:   
+ `d$$'     ,$P"'   .    $$$    
+ $$P      d$'     ,    $$P    
+ $$:      $$.   -    ,d$$'    
+ $$;      Y$b._   _,d$P'      
+ Y$$.    `.`"Y$$$$P"'         
+ `$$b      "-.__              
+  `Y$$                       
+   `Y$$.                     
+     `$$b.                   
+       `Y$$b.                
+          `"Y$b._            
+              `""""          
+EOF
+echo -e "${NC}"
+
+    echo -e "${GREEN}══════════════════════════════════════════════════════════"
+    echo "                  WORMGPT TERMINAL v4.0"
+    echo "              Developer: JianCode"
+    echo "           Total Users: $USER_COUNT"
+    echo "══════════════════════════════════════════════════════════${NC}"
+    echo ""
+done
