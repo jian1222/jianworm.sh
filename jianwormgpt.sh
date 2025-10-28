@@ -10,7 +10,7 @@ for i in {10..100..10}; do
   esac
   bar=$(printf '%*s' $((i/10)) | tr ' ' '=')
   space=$(printf '%*s' $((10 - i/10)))
-  printf "$c[$bar>$space] $i%%\033[0m\r"
+  printf "%s[%s>%s] %s%%\033[0m\r" "$c" "$bar" "$space" "$i"
   sleep 0.12
 done
 echo -e "\n\033[1;31m[\033[1;37m✓\033[1;31m] \033[1;37mWORMGPT DOMINATOR FULLY ARMED 😈\033[0m\n"
@@ -24,7 +24,7 @@ echo -e "\033[1;31m║ \033[1;37m         🔥 WORMGPT DOMINATOR v6.6.6 - UNLEAS
 echo -e "\033[1;31m╚═══════════════════════════════════════════════════════════╝\033[0m\n"
 
 wormgpt_chat() {
-    local api_key="KEY_LU"
+    local api_key="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"
     local base_url="https://openrouter.ai/api/v1"
     local model="deepseek/deepseek-v3.1-terminus"
 
@@ -45,7 +45,7 @@ wormgpt_chat() {
             esac
             bar=$(printf '%*s' $((i/10)) | tr ' ' '=')
             space=$(printf '%*s' $((10 - i/10)))
-            printf "$c[$bar>$space] $i%%\033[0m\r"
+            printf "%s[%s>%s] %s%%\033[0m\r" "$c" "$bar" "$space" "$i"
             sleep 0.12
         done
         printf "\n\033[1;31m[\033[1;37mDEVIL\033[1;31m] \033[1;37mResponse Incoming...\033[0m\n\n"
