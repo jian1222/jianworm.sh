@@ -11,7 +11,7 @@ NC='\033[0m'
 
 API_KEY="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"
 BASE_URL="https://openrouter.ai/api/v1"
-MODEL="deepseek/deepseek-v3.1-terminus"
+MODEL="meta-llama/llama-3.1-8b-instruct:free"
 
 if ! command -v curl &> /dev/null; then
     echo "Installing curl..."
